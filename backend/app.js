@@ -13,6 +13,7 @@ const router = require('./routes/user');
 const app = express();
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauce');
+const path = require('path');
 
 app.use(express.json());
 
@@ -34,35 +35,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/auth', userRoutes);
-//app.use((req, res) => {
-//res.json({ message: 'not the sauce msg!' }); 
-//});
-
 app.use('/api/sauces', saucesRoutes);
 
-
-
-app.get('/api/sauces', (req, res, next)=> {
-  console.log('we here');
-  const sauces = [
-{
-  _id: '12345',
-  name: 'First Sauce',
-  manufacturer: 'VSM Industry',
-  description: 'Very hot sauce',
-  heat: 4,
-  likes: 8,
-  dislikes: 2,
-  imageUrl: '',
-  mainPepper: 'Aleppo Pepper',
-  usersLiked: '1223',
-  usersDisliked: 'qew',
-  userId: 'Pro User',
-},
-  ];
-  res.status(200).json(sauces);
-});
 
 module.exports = app;

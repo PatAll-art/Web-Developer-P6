@@ -14,7 +14,7 @@ const sauceSchema = mongoose.Schema({
         mainPepper: { type: String, require: true},
         usersLiked: { type: [String]},
         usersDisliked: { type: [String] },
-        userId: { type: String, require: true, unique: true },
+        userId: { type: String, require: true },
 });
 
 sauceSchema.plugin(uniqueValidator);
