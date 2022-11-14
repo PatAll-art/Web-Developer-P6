@@ -136,49 +136,43 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.likeButton = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    let like = sauce.usersLiked;
+    let userId = req.body.userId;
+    let position = like.indexOf(userId);
+    let dislike = sauce.usersDisliked;
+    let dislikePosition = dislike.indexOf(userId);
+    let likedPosition = like.indexOf(userId);
+    let neutralLike = like.indexOf(userId);
+    let neutralDislike = dislike.indexOf(userId);
+
     if (req.body.like == 1) {
       console.log("here");
-      let like = sauce.usersLiked;
-      let userId = req.body.userId;
-      let position = like.indexOf(userId);
       if (position == -1) {
         like.push(userId);
       }
-      let dislike = sauce.usersDisliked;
-      let dislikePosition = dislike.indexOf(userId);
       if (dislikePosition > -1) {
         dislike.splice(dislikePosition, 1);
       }
     }
     if (req.body.like == -1) {
-      let dislike = sauce.usersDisliked;
-      let userId = req.body.userId;
-      let position = dislike.indexOf(userId);
       if (position == -1) {
         dislike.push(userId);
       }
-      let like = sauce.usersLiked;
-      let likedPosition = like.indexOf(userId);
       if (likedPosition > -1) {
         like.splice(likedPosition, 1);
-      } 
+      }
     }
     if (req.body.like == 0) {
-      let like = sauce.usersLiked;
-      let userId = req.body.userId;
-      let neutralLike = like.indexOf(userId);
       if (neutralLike > -1) {
         like.splice(neutralLike, 1);
-      } 
-      let dislike = sauce.usersDisliked;
-      let neutralDislike = dislike.indexOf(userId);
+      }
       if (neutralDislike > -1) {
         dislike.splice(neutralDislike, 1);
       }
     }
     
-    sauce.likes = sauce.usersLiked.lenght;
-    sauce.dislikes = sauce.usersDisliked.lenght;
+    sauce.likes = like.length;
+    sauce.dislikes = dislike.length;
 
     Sauce.updateOne({ _id: req.params.id }, sauce)
       .then((sauce) => {
